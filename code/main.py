@@ -32,9 +32,18 @@ def q1():
     X_test = dataset["Xtest"]
     y_test = dataset["ytest"]
 
-    """YOUR CODE HERE FOR Q1. Also modify knn.py to implement KNN predict."""
-    raise NotImplementedError()
+    k_vals = [1,3,10]
+    for k in k_vals:
+        model = KNN(k)
+        print("k:",k)
+        model.fit(X,y)
+        y_hat_train = model.predict(X)
+        train_error=np.mean(y_hat_train!=model.y)
 
+        print("train error:", train_error)
+        y_hat_test = model.predict(X_test)
+        test_error=np.mean(y_hat_test!=y_test)
+        print("test_error:",test_error)
 
 
 @handle("2")
