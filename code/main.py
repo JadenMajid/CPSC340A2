@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+from operator import indexOf
 import os
 import pickle
 from pathlib import Path
@@ -55,8 +56,67 @@ def q2():
     y_test = dataset["ytest"]
 
     ks = list(range(1, 30, 4))
-    """YOUR CODE HERE FOR Q2"""
-    raise NotImplementedError()
+    errors_validation = []
+    errors_training = []
+    
+
+    for k in ks:
+        n_folds = 10
+        total_error_validation = 0;
+        total_error_training = 0;
+        for n in range(n_folds):
+            train_mask = np.ones(len(X), dtype=bool) 
+            train_mask[n*len(X)//n_folds:(n+1)*len(X)//n_folds] = 0
+            validation_mask = ~train_mask
+            
+            model = KNN(k)
+            model.fit(X[train_mask],y[train_mask])
+            y_hat_train = model.predict(X[train_mask])
+            train_error=np.mean(y_hat_train!=y[train_mask])
+            total_error_training+=train_error
+            
+            y_hat_test = model.predict(X[validation_mask])
+            test_error=np.mean(y_hat_test!=y[validation_mask])
+            total_error_validation+=test_error
+            
+        avg_test_error = total_error_validation/n_folds
+        avg_training_error = total_error_training/n_folds
+        errors_validation.append(avg_test_error)
+        errors_training.append(avg_training_error)
+        print("k:",k)
+        print("average training error:",avg_training_error)
+        print("average validation error:",avg_test_error)
+        print()
+    
+    errors_validation = np.array(errors_validation)
+    plt.plot(ks, errors_validation)
+    plt.xlabel("k")
+    plt.ylabel("average error")
+    plt.title(f"k vs average testing error in {n_folds}-folds")
+    plt.savefig("../figs/q2_k_errors.pdf")
+    plt.savefig("../figs/q2_k_errors.png")
+    
+    plt.cla()
+    
+    plt.plot(ks, -1*errors_validation+1)
+    plt.xlabel("k")
+    plt.ylabel("average accuracy")
+    plt.title(f"k vs average testing accuracy in {n_folds}-folds")
+    plt.savefig("../figs/q2_k_accuracy.pdf")
+    plt.savefig("../figs/q2_k_accuracy.png")
+    
+    plt.cla()    
+    
+    errors_training = np.array(errors_training)
+    plt.plot(ks, -1*errors_training+1)
+    plt.xlabel("k")
+    plt.ylabel("average accuracy")
+    plt.title(f"k vs average training accuracy in {n_folds}-folds")
+    plt.savefig("../figs/q2_k_accuracy.pdf")
+    plt.savefig("../figs/q2_k_accuracy.png")
+    
+    
+        
 
 
 
@@ -71,8 +131,9 @@ def q3_2():
     groupnames = dataset["groupnames"]
     wordlist = dataset["wordlist"]
 
-    """YOUR CODE HERE FOR Q3.2"""
-    raise NotImplementedError()
+    print("word 73: ", wordlist[72])
+    print("training example 803: ", wordlist[np.where(X[802])])
+    print("newsgroup name:", groupnames[y[802]])
 
 
 

@@ -30,9 +30,7 @@ class NaiveBayes:
         # p(x_ij=1 | y_i==c) as p_xy[j, c]
         # p(x_ij=0 | y_i==c) as 1 - p_xy[j, c]
         p_xy = 0.5 * np.ones((d, k))
-        # TODO: replace the above line with the proper code
-
-        raise NotImplementedError()
+        
 
 
         self.p_y = p_y
