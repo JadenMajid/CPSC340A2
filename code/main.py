@@ -21,6 +21,7 @@ from kmeans import Kmeans
 from knn import KNN
 from naive_bayes import NaiveBayes, NaiveBayesLaplace
 from random_tree import RandomForest, RandomTree
+import sklearn 
 
 
 @handle("1")
@@ -44,6 +45,34 @@ def q1():
         y_hat_test = model.predict(X_test)
         test_error=np.mean(y_hat_test!=y_test)
         print("test_error:",test_error)
+        
+        plot_classifier(model, X, y)
+        plt.title(f"knn @ k={k}")
+        plt.savefig(f"../figs/q1_knn_{k}.pdf")
+        plt.savefig(f"../figs/q1_knn_{k}.png")
+        print()
+        
+        # SKLEARN KNN
+        sk_model = KNeighborsClassifier(n_neighbors=k)
+        sk_model.fit(X, y)
+        y_hat_train_sk = sk_model.predict(X)
+        train_error_sk = np.mean(y_hat_train_sk != y)
+        print(f"[sklearn] train error: {train_error_sk}")
+        y_hat_test_sk = sk_model.predict(X_test)
+        test_error_sk = np.mean(y_hat_test_sk != y_test)
+        print(f"[sklearn] test error: {test_error_sk}")
+        # Plot sklearn classifier
+        def sk_predict(xx):
+            return sk_model.predict(xx)
+        plot_classifier(sk_model, X, y)
+        plt.title(f"sklearn knn @ k={k}")
+        plt.savefig(f"../figs/q1_knn_{k}_sklearn.pdf")
+        plt.savefig(f"../figs/q1_knn_{k}_sklearn.png")
+        print()
+
+
+    
+    
 
 
 @handle("2")

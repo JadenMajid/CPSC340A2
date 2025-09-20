@@ -22,13 +22,10 @@ class KNN:
     def predict(self, X_hat):
         n,m = X_hat.shape
         y_hat = np.zeros(n)
-        # print(X_hat)
         
         distances = euclidean_dist_squared(X_hat, self.X)
         for i, x in enumerate(distances):
             indices_of_min_k_distances = x.argsort()[:self.k]
-            # print(indices_of_min_k_distances)
-            # print(x)
             y_hat[i] = utils.mode(self.y[indices_of_min_k_distances])
         return y_hat
 
